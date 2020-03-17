@@ -1,21 +1,35 @@
-import React, { Component } from "react";
+import React, { PureComponent } from 'react';
 
-class Timer extends Component {
+class Timer extends PureComponent {
   constructor() {
     super();
     this.timer = React.createRef();
     this.state = {
       time: 0,
-      color: "#" + Math.floor(Math.random() * 16777215).toString(16)
+      color: '#' + Math.floor(Math.random() * 16777215).toString(16),
     };
   }
 
   //Your code here
+  componentDidUpdate() {
+    this.timer.current.style.color =
+      '#' + Math.floor(Math.random() * 16777215).toString(16);
+  }
+
+  // The only change that registers for our Timer components is the change in this.state.time, We can just change from a Component to a PureComponent instead of below:
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.time === nextState.time) {
+      return false;
+    }
+    return true;
+  }
+
+  // useful in stopping unwanted component updates and is mainly used for performance enhancement
 
   componentDidMount() {
     this.interval = setInterval(
       this.clockTick,
-      this.props.updateInterval * 1000
+      this.props.updateInterval * 1000,
     );
   }
 
@@ -26,24 +40,24 @@ class Timer extends Component {
   render() {
     const { time, color, logText } = this.state;
     return (
-      <section className="Timer" style={{ background: color }} ref={this.timer}>
+      <section className='Timer' style={{ background: color }} ref={this.timer}>
         <h1>{time}</h1>
         <button onClick={this.stopClock}>Stop</button>
-        <aside className="logText">{logText}</aside>
+        <aside className='logText'>{logText}</aside>
         <small onClick={this.handleClose}>X</small>
       </section>
     );
   }
 
   clockTick = () => {
-    this.setState(prevState => ({
-      time: prevState.time + this.props.updateInterval
+    this.setState((prevState) => ({
+      time: prevState.time + this.props.updateInterval,
     }));
   };
 
   stopClock = () => {
     clearInterval(this.interval);
-    this.setState({ className: "hidden" });
+    this.setState({ className: 'hidden' });
   };
 
   // for the 'x' button,
