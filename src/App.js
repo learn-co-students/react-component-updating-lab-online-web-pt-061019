@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Timer from './Timer'
+
 import Controls from './Controls'
 
 //no need to modify anything in this component
